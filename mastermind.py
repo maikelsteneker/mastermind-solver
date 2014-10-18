@@ -12,6 +12,8 @@ parser.add_argument('-u', '--unique', dest='unique', action='store_true',
                     help='Allow non-unique solutions.')
 parser.add_argument('-n', '--numbers', dest='numbers', action='store_true',
                     help='Use numbers instead of colours')
+parser.add_argument('-t', '--self-test', dest='test', action='store_true',
+                    help='Use doctest to run internal tests.')
 args = parser.parse_args()
 
 n_colours = args.colours
@@ -82,8 +84,9 @@ def conflict(solution, hint):
     return judge(solution, guess) != judgement
 
 if __name__=='__main__':
-    import doctest
-    doctest.testmod()
+    if test:
+        import doctest
+        doctest.testmod()
     
     done = False
     hints = []
