@@ -2,6 +2,8 @@
 n_colours = 9
 n_pegs = 4
 unique = True
+colour_names = ['Colour %d' % i for i in range(n_colours)]
+pretty_guess = lambda guess: ' '.join(colour_names[i] for i in guess)
 
 def generate_all_solutions(n_colours=n_colours, n_pegs=n_pegs, unique=unique, forbidden=[]):
     """Generates all possible solutions for a given number of colours and pegs."""
@@ -63,16 +65,19 @@ if __name__=='__main__':
     done = False
     hints = []
     next_guess = list(range(n_pegs))
-    while not done:
-        print('Next guess: {0}'.format(next_guess))
-        hints.append((next_guess,
-            (int(input('Number of pegs on the correct location: ')),
-             int(input('Number of correct pegs in the wrong location: ')))))
-        generator = generate_solutions(hints=hints)
-        next_guess = next(generator)
-        try:
-            next(generator)
-        except StopIteration:
-            done = True
-    solution = next_guess
-    print('Solution: {0}'.format(solution))
+    try:
+        while not done:
+            print('Next guess: {0}'.format(pretty_guess(next_guess)))
+            hints.append((next_guess,
+                (int(input('Number of pegs on the correct location: ')),
+                 int(input('Number of correct pegs in the wrong location: ')))))
+            generator = generate_solutions(hints=hints)
+            next_guess = next(generator)
+            try:
+                next(generator)
+            except StopIteration:
+                done = True
+        solution = next_guess
+        print('Solution: {0}'.format(solution))
+    except StopIteration:
+        print('No solution that satisfies the provided hints!')
